@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+
+<title>{% block title %}Es-En Translator{% endblock %}</title>
+
+{% block content %}
+<h1>Please enter a Spanish word to Translate to English</h1>
+<form action="{% url "es-translator" %}" method="POST">
+    {% csrf_token %}
+    {% for form_field in word_form %}
+    <div>
+        {{ form_field.label_tag}}
+        {{ form_field }}
+    </div>
+    {% endfor %}
+    <button>Translate</button>
+</form>
+{% endblock content %}

@@ -1,0 +1,18 @@
+from django.urls import path
+
+from application.translator_api import translate_en
+from . import views
+
+urlpatterns = [
+    path("", views.HomeView.as_view(), name=("home-page")),
+    path("en-es", views.EnTranslateView.as_view(), name=("en-translator")),
+    path("es-en", views.EsTranslateView.as_view(), name=("es-translator")),
+    path("manual", views.ManualTranslateView.as_view(), name=("manual-translator")),
+    path("databases", views.DatabaseSelectionView.as_view(), name=("databases")),
+    path("database/<str:category>", views.DatabaseView.as_view(), name=("database")),
+    path("database_update/<int:id>", views.ManualUpdateView.as_view(), name=("update")),
+    path("database_delete/<int:id>/<str:category>", views.delete_word, name=("delete")),
+    path("quiz-home", views.QuizHomeView.as_view(), name=("quiz-home")),
+    path("quiz-game/<str:category>/<int:iterations>", views.QuizView.as_view(), name=("quiz")),
+    path("success", views.SuccessView.as_view(), name=("success"))
+]

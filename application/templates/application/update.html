@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+
+<title>{% block title %}Manual Translator{% endblock %}</title>
+
+{% block content %}
+<h1>Please Update the word and its corresponding translation and category</h1>
+<h2>Word to be updated</h2>
+{% for word in update_word  %}
+<h3>
+    English word: {{word.english_word}} <br>
+    Spanish word: {{word.spanish_word}} <br>
+    Category: {{word.category}}
+<h3>
+{% endfor %}
+<form action="{% url "update" id %}" method="POST">
+    {% csrf_token %}
+    {% for form_field in word_form %}
+    <div>
+        {{ form_field.label_tag}}
+        {{ form_field }}
+    </div>
+    {% endfor %}
+    <button>Update</button>
+</form>
+{% endblock content %}

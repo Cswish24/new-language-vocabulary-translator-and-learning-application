@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css%}
+<link rel="stylesheet" href="{% static "application/home.css" %}">
+{% endblock %}
+<title>{% block title %}Home{% endblock %}</title>
+
+{% block content %}
+<div class="home-body">
+    <h1>Home Page</h1>
+    <p>what would you like to do</p>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card">
+                <a href="{% url "en-translator" %}">
+                    <div class="card-body">
+                        <h5 class="card-title">English Translator</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Translate English to Spanish</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card">
+                <a href="{% url "es-translator" %}">
+                    <div class="card-body">
+                        <h5 class="card-title">Spanish Translator</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Translate Spanish to English</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card">
+                <a href="{% url "manual-translator" %}">
+                    <div class="card-body">
+                        <h5 class="card-title">Manual Translator</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Manually Translate words</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card">
+                <a href="{% url "quiz-home" %}">
+                    <div class="card-body">
+                        <h5 class="card-title">Quiz</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">See available Quizzes</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
+
+{% comment %} fd5d5d ff8080 fff7bc c0eda6 {% endcomment %}

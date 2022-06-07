@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css%}
+<link rel="stylesheet" href="{% static "application/translate.css" %}">
+{% endblock %}
+
+<title>{% block title %}En-Es Translator{% endblock %}</title>
+
+{% block content %}
+<h1>Please enter an English word to Translate to Spanish</h1>
+<div class="container">
+    <div class="inner-div">
+        <form action="{% url "en-translator" %}" method="POST">
+            {% csrf_token %}
+            {% for form_field in word_form %}
+            <div>
+                {{ form_field.label_tag}}
+                {{ form_field }}
+            </div>
+            
+            {% endfor %}
+            <button>Translate</button>
+        </form>
+    </div> 
+</div>
+
+{% endblock content %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+
+<title>{% block title %}Quiz Selection{% endblock %}</title>
+
+{% block content %}
+<h2>Quiz Selection Page</h2>
+<h3>Which category shall we fine tune today?</h3>
+{% for category in categories%}
+<a href="{% url "quiz" category 0 %}"><button>{{category}} Quiz</button></a>
+{% endfor %}
+{% endblock content %}
