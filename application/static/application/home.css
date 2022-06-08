@@ -1,0 +1,70 @@
+.home-body {
+  background-color: #ff6b6b;
+  height: 85vh;
+}
+
+.home-skills {
+  background-color: #ffec99;
+  padding-top: 2.4rem;
+}
+
+.home-header {
+  width: 35%;
+  text-align: center;
+}
+
+.home-header h2 {
+  font-size: 3.2rem;
+  margin-bottom: 1.6rem;
+}
+
+.home-header p {
+  font-size: 2rem;
+}
+
+.card-box {
+  display: flex;
+  padding: 4.8rem;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.card-link {
+  width: 20%;
+  border: 1px solid #777;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.card-link:hover,
+.card-link:active {
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(110%);
+}
+
+.card-link a {
+  text-decoration: none;
+  color: #333;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  padding: 1.6rem;
+}
+
+.card-title {
+  font-size: 2.8rem;
+  margin-bottom: 0.4rem;
+  color: #ff6b6b;
+}
+
+.card-subtitle {
+  font-size: 1.6rem;
+  margin-bottom: 1.2rem;
+  color: #777;
+}
+
+.card-text {
+  font-size: 2rem;
+}
