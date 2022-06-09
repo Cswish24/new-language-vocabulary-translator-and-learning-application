@@ -1,27 +1,35 @@
+
+
+
 {% extends "base.html" %}
 {% load static %}
 {% block css%}
+<link rel="stylesheet" href="{% static "application/translator.css" %}">
+<link rel="stylesheet" href="{% static "application/quiz_databases.css" %}">
 <link rel="stylesheet" href="{% static "application/databases.css" %}">
 {% endblock %}
 
 <title>{% block title %}Databases{% endblock %}</title>
 
 {% block content %}
-<div class="home-body">
-    <h1>Select a Database to View or Modify</h1>
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-    {% for category in categories %}
-    {% comment %} <a href="{% url "database" category %}"><button>{{category| capfirst}} Database </button></a> {% endcomment %}
-        <div class="col">
-            <div class="card">
-                <a href="{% url "database" category %}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{category| capfirst}} Database</h5>
-                    </div>
-                </a>
-            </div>
-        </div>
-    {% endfor %}
-</div>
+<div class="body">
+    <div class="footer">
 
+<div class="container">
+    <div class="container-flex">
+        <h2 class="heading">Select a Database to View or Modify</h2>
+
+       
+            <div class="cat-box">
+              {% for category in categories%}
+              <a href="{% url "database" category%}" class="link">{{category|capfirst}} Database</a>
+              {% endfor %}
+
+         </div>
+
+
+    </div> 
+</div>
+</div>
+</div>
 {% endblock content %}
