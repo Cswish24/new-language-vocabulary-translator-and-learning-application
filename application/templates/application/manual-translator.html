@@ -1,10 +1,13 @@
 {% extends "base.html" %}
-
+{% load static %}
+{% block css%}
+<link rel="stylesheet" href="{% static "application/translator.css" %}">
+{% endblock %}
 
 <title>{% block title %}Manual Translator{% endblock %}</title>
 
 {% block content %}
-<h1>Please enter the word and its corresponding translation</h1>
+{% comment %} <h1>Please enter the word and its corresponding translation</h1>
 <form action="{% url "manual-translator" %}" method="POST">
     {% csrf_token %}
     {% for form_field in word_form %}
@@ -14,5 +17,32 @@
     </div>
     {% endfor %}
     <button>Translate</button>
-</form>
+</form> {% endcomment %}
+<div class="body">
+    <div class="footer">
+
+<div class="container">
+    <div class="container-flex">
+        <h2 class="heading">Enter a manual translation</h2>
+        <p class="subheading">Pick a category you wish to associate the word with. Quizzes and quiz statistics will be generated for each category you create.</p>
+
+        <form action="{% url "en-translator" %}" method="POST">
+            <div class="grid">
+            {% csrf_token %}
+            {% for form_field in word_form %}
+            <div class="form-label" >
+                {{ form_field.label_tag}}
+            </div>
+            <div class="form-field">
+                {{ form_field }}
+            </div>
+            
+            {% endfor %}
+            <button class="translate-btn">Translate!</button>
+         </div>
+        </form>
+    </div> 
+</div>
+</div>
+</div>
 {% endblock content %}

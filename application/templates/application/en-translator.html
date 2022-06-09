@@ -1,27 +1,37 @@
 {% extends "base.html" %}
 {% load static %}
 {% block css%}
-<link rel="stylesheet" href="{% static "application/translate.css" %}">
+<link rel="stylesheet" href="{% static "application/translator.css" %}">
 {% endblock %}
 
 <title>{% block title %}En-Es Translator{% endblock %}</title>
 
 {% block content %}
-<h1>Please enter an English word to Translate to Spanish</h1>
+<div class="body">
+    <div class="footer">
+
 <div class="container">
-    <div class="inner-div">
+    <div class="container-flex">
+        <h2 class="heading">Translate English to Spanish</h2>
+        <p class="subheading">Select an English word and a category you wish to associate the word with. Quizzes and quiz statistics will be generated for each category you create.</p>
+
         <form action="{% url "en-translator" %}" method="POST">
+            <div class="grid">
             {% csrf_token %}
             {% for form_field in word_form %}
-            <div>
+            <div class="form-label" >
                 {{ form_field.label_tag}}
+            </div>
+            <div class="form-field">
                 {{ form_field }}
             </div>
             
             {% endfor %}
-            <button>Translate</button>
+            <button class="translate-btn">Translate!</button>
+         </div>
         </form>
     </div> 
 </div>
-
+</div>
+</div>
 {% endblock content %}
