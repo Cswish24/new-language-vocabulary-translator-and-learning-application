@@ -32,7 +32,7 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  padding-bottom: 3.2rem;
+  margin-bottom: 3.6rem;
 }
 
 .form-label {
