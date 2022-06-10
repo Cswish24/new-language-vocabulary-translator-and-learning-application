@@ -1,26 +1,57 @@
+
 {% extends "base.html" %}
+{% load static %}
+{% block css%}
+<link rel="stylesheet" href="{% static "application/translator.css" %}">
+<link rel="stylesheet" href="{% static "application/update.css" %}">
 
+{% endblock %}
 
-<title>{% block title %}Manual Translator{% endblock %}</title>
+<title>{% block title %}Update/Delete{% endblock %}</title>
 
 {% block content %}
-<h1>Please Update the word and its corresponding translation and category</h1>
-<h2>Word to be updated</h2>
-{% for word in update_word  %}
-<h3>
-    English word: {{word.english_word}} <br>
-    Spanish word: {{word.spanish_word}} <br>
-    Category: {{word.category}}
-<h3>
-{% endfor %}
-<form action="{% url "update" id %}" method="POST">
-    {% csrf_token %}
-    {% for form_field in word_form %}
-    <div>
-        {{ form_field.label_tag}}
-        {{ form_field }}
+<div class="body">
+    <div class="footer">
+
+<div class="container">
+    
+    <div class="container-flex">
+        <h2 class="heading">Delete</h2>
+        <p class="subheading">Delete the word from the database</p>
+        <div class="grid gap">
+            {% for word in update_word  %}
+            <p> English word: </p><p>{{word.english_word}}</p>
+            <p> Spanish word: </p><p>{{word.spanish_word}}</p>
+            <p> Category: </p><p>{{word.category}}</p>
+            
+            <a class="translate-btn delete" href="{% url "delete" word.id word.category %}" method="delete">Delete</a>
+            {% endfor %}
+        </div>
     </div>
-    {% endfor %}
-    <button>Update</button>
-</form>
+    <div class="flex-or">
+    <h2 class="heading"> OR...</h2>
+        
+        <div class="container-flex">
+            <h2 class="heading">Update</h2>
+        <p class="subheading">All fields must be complete</p>
+            <form action="{% url "update" id %}" method="POST">
+                <div class="grid">
+                    {% csrf_token %}
+                    {% for form_field in word_form %}
+                    <div class="form-label" >
+                        {{ form_field.label_tag}}
+                    </div>
+                    <div class="form-field">
+                        {{ form_field }}
+                    </div>
+            
+                    {% endfor %}
+                    <button class="translate-btn">Update</button>
+                </div>
+            </form>
+        </div> 
+    </div>
+</div>
+</div>
+</div>
 {% endblock content %}

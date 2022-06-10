@@ -1,23 +1,39 @@
+
+
 {% extends "base.html" %}
 {% load static %}
 {% block css%}
+<link rel="stylesheet" href="{% static "application/translator.css" %}">
+<link rel="stylesheet" href="{% static "application/quiz_databases.css" %}">
 <link rel="stylesheet" href="{% static "application/database.css" %}">
 {% endblock %}
 
-<title>{% block title %}Databases{% endblock %}</title>
+<title>{% block title %}{{category|capfirst}} Database{% endblock %}</title>
 
 {% block content %}
-<div class="home-body">
-<h1>{{category|capfirst}} Database</h1>
-<p class="subtitle">Update or delete words from you database</p>
-<div class="row row-cols-1 row-cols-md-3 g-4">
-{% for word in words %}
-<div class="col">
-    <p>
-        {{word.english_word}}: {{word.spanish_word}}
-        <a href="{% url "update" word.id%}" method="post"> Update</a>  
-        <a href="{% url "delete" word.id category %}" method="delete">Delete </a>
-    </p>
+<div class="body">
+    <div class="footer">
+
+<div class="container">
+    <div class="container-flex">
+        <div class="container-header">
+            <h2 class="heading">{{category|capfirst}} Database</h2>
+            <p class="subheading">Update or delete words from the database</p>
+        </div>
+       
+            <div class="cat-box">
+                {% for word in words %}
+                    <p>
+                        {{word.english_word}}: {{word.spanish_word}}&ensp;
+                        <a class="update" href="{% url "update" word.id%}" method="post"> Update &ensp;</a>  
+                        {% comment %} <a class="delete" href="{% url "delete" word.id category %}" method="delete">Delete </a> {% endcomment %}
+                    </p>
+                {% endfor %}
+         
+         </div>
+
+    </div> 
 </div>
-{% endfor %}
+</div>
+</div>
 {% endblock content %}

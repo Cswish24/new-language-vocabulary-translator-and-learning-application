@@ -1,0 +1,26 @@
+.container-flex {
+  width: 100%;
+  padding: 0 3.2rem;
+}
+.container-header {
+  width: 50%;
+  align-self: center;
+  transform: translateX(25%);
+}
+
+.cat-box p {
+  font-size: 2rem;
+}
+
+.update:link,
+.update:visited {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #ff6b6b;
+}
+
+.update:hover,
+.update:active {
+  color: #ffa8a8;
+}
