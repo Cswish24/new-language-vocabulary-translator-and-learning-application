@@ -3,32 +3,39 @@
 
 
 {%block css%}
-  <link rel="stylesheet" href="{% static "application/card-flip.css" %}">
+
+<link rel="stylesheet" href="{% static "application/card-flip.css" %}">
+<link rel="stylesheet" href="{% static "application/quiz-game.css" %}">
+
+  
 {%endblock%}
 
-<title>{% block title %}{{words.category}} Quiz{% endblock %}</title>
+<title>{% block title %}{{words.category| capfirst}} Quiz{% endblock %}</title>
 
 {% block content %}
-<br>
-<br>
+<div class="container-red">
+  <div class="container">
+    <div class="grid">
+      <h2 class="quiz-header">{{words.category| capfirst}} Quiz</h2>
+      <p class="quiz-subheading">Guess the translation for the word, then flip the card. If you guess right, click correct. If wrong, click incorrect </p>
 <div class="flip-card">
   <div class="flip-card-inner">
     <div class="flip-card-front">
-      <h1>Spanish Word</h1>
-      <br>
-      <h1>{{words.spanish_word}}
+      <p class="lang">Spanish Word</p>
+      <p class="word">{{words.spanish_word|capfirst}}</p>
     </div>
     <div class="flip-card-back">
-      <h1>English Word</h1>
-      <br>
-      <h1>{{words.english_word}}</h1>
+      <p class="lang">English Word</p>
+      <p class="word">{{words.english_word|capfirst}}</p>
     </div>
   </div>
 </div>
 
-<a href="{% url "quiz" words.category iterations %}"><button>Guess Wrong</button></a>
-<a href="{% url "quiz" words.category iterations %}"><button>Guess Right</button></a>
-<br>
-<br>
-<a href="{% url "quiz-home"%}"><button>Back to Quiz Home</button></a>
+<a class="btn " href="{% url "quiz" words.category iterations %}">Correct</a>
+<a class="btn " href="{% url "quiz" words.category iterations %}">Incorrect</a>
+
+<a class="btn cspan" href="{% url "quiz-home"%}">Back to Quiz Home</a>
+</div>
+</div>
+</div>
 {% endblock content %}

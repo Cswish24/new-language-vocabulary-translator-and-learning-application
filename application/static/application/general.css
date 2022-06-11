@@ -64,6 +64,7 @@ Medium: 11px
 
 html {
   font-size: 62.5%;
+  color: #333;
 }
 
 p {
@@ -114,4 +115,71 @@ p {
 .container {
   display: flex;
   justify-content: center;
+}
+
+.background {
+  background-color: #ff6b6b;
+  height: 85vh;
+}
+.main {
+  background-color: #ffec99;
+}
+
+.container-flex {
+  display: flex;
+  flex-direction: column;
+  width: 40rem;
+}
+
+.heading {
+  font-size: 3.2rem;
+  text-align: left;
+  margin: 3.2rem 0 1.2rem;
+}
+
+.subheading {
+  font-size: 1.8rem;
+  color: #777;
+  margin-bottom: 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  margin-bottom: 3.6rem;
+}
+
+.btn {
+  color: #333;
+  width: 30%;
+  grid-column: 1/-1;
+  justify-self: center;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 0.4rem 0;
+  background-color: #ff6b6b;
+  border: none;
+  border-radius: 12px;
+  transition: all 0.1s;
+}
+
+.btn:hover {
+  transform: scale(110%);
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+  transform: scale(100%);
+  box-shadow: none;
+}
+.success {
+  font-size: 4.8rem;
+  font-weight: 600;
+  padding: 7.2rem;
+  text-align: center;
+}
+
+.success:first-child {
+  padding-bottom: 0rem;
 }

@@ -1,25 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
 {% block css%}
+<link rel="stylesheet" href="{% static "application/general.css" %}">
+
 <link rel="stylesheet" href="{% static "application/translator.css" %}">
 {% endblock %}
 
 <title>{% block title %}Manual Translator{% endblock %}</title>
 
 {% block content %}
-{% comment %} <h1>Please enter the word and its corresponding translation</h1>
-<form action="{% url "manual-translator" %}" method="POST">
-    {% csrf_token %}
-    {% for form_field in word_form %}
-    <div>
-        {{ form_field.label_tag}}
-        {{ form_field }}
-    </div>
-    {% endfor %}
-    <button>Translate</button>
-</form> {% endcomment %}
-<div class="body">
-    <div class="footer">
+
+<div class="background">
+    <div class="main">
 
 <div class="container">
     <div class="container-flex">
@@ -38,7 +30,7 @@
             </div>
             
             {% endfor %}
-            <button class="translate-btn">Translate!</button>
+            <button class="btn">Translate!</button>
          </div>
         </form>
     </div> 

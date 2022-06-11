@@ -10,8 +10,8 @@
 <title>{% block title %}Update/Delete{% endblock %}</title>
 
 {% block content %}
-<div class="body">
-    <div class="footer">
+<div class="background">
+    <div class="main">
 
 <div class="container">
     
@@ -24,7 +24,7 @@
             <p> Spanish word: </p><p>{{word.spanish_word}}</p>
             <p> Category: </p><p>{{word.category}}</p>
             
-            <a class="translate-btn delete" href="{% url "delete" word.id word.category %}" method="delete">Delete</a>
+            <a class="btn delete" href="{% url "delete" word.id word.category %}" method="delete">Delete</a>
             {% endfor %}
         </div>
     </div>
@@ -46,7 +46,7 @@
                     </div>
             
                     {% endfor %}
-                    <button class="translate-btn">Update</button>
+                    <button class="btn">Update</button>
                 </div>
             </form>
         </div> 
