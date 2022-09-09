@@ -5,7 +5,7 @@ from .models import Words
 class EnWordForm(forms.ModelForm):
     class Meta:
         model = Words
-        exclude = ['spanish_word', 'slug']
+        exclude = ['spanish_word', 'slug', 'tries', 'wrong_guesses', 'correct_guesses' ]
         labels = {
             "english_word": "English word"
         }
@@ -13,7 +13,7 @@ class EnWordForm(forms.ModelForm):
 class EsWordForm(forms.ModelForm):
     class Meta:
         model = Words
-        exclude = ['english_word', 'slug']
+        exclude = ['english_word', 'slug', 'tries', 'wrong_guesses', 'correct_guesses']
         labels = {
             "spanish_word": "Spanish word"
         }
@@ -21,7 +21,7 @@ class EsWordForm(forms.ModelForm):
 class ManualWordForm(forms.ModelForm):
     class Meta:
         model = Words
-        exclude = ['slug']
+        exclude = ['slug', 'tries', 'wrong_guesses', 'correct_guesses']
         labels = {
             "spanish_word": "Spanish word",
             "english_word": "English word"

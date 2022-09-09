@@ -17,7 +17,7 @@
   <div class="container">
     <div class="grid">
       <h2 class="quiz-header">{{words.category| capfirst}} Quiz</h2>
-      <p class="quiz-subheading">Guess the translation for the word, then flip the card. If you guess right, click correct. If wrong, click incorrect </p>
+      <p class="quiz-subheading">Guess the translation for the word, then flip the card. If you guess right, click correct. If wrong, click incorrect. Be honest! An algortithm will determine which words you need to practice more. </p>
 <div class="flip-card">
   <div class="flip-card-inner">
     <div class="flip-card-front">
@@ -31,8 +31,8 @@
   </div>
 </div>
 
-<a class="btn " href="{% url "quiz" words.category iterations %}">Correct</a>
-<a class="btn " href="{% url "quiz" words.category iterations %}">Incorrect</a>
+<a class="btn " href="{% url "quiz" words.category iterations words.id 1 %}">Correct</a>
+<a class="btn " href="{% url "quiz" words.category iterations words.id 0 %}">Incorrect</a>
 
 <a class="btn cspan" href="{% url "quiz-home"%}">Back to Quiz Home</a>
 </div>

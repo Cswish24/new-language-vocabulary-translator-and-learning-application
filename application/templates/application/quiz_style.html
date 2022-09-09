@@ -20,7 +20,7 @@
        
             <div class="cat-box">
               {% for category in categories%}
-              <a href="{% url "quiz" category 0 0 0 %}" class="link">{{category|capfirst}} Quiz</a>
+              <a href="{% url "quiz" category 0 %}" class="link">{{category|capfirst}} Quiz</a>
               {% endfor %}
          
          </div>

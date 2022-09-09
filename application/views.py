@@ -72,6 +72,7 @@ class DatabaseSelectionView(View):
         }
         return render(request, 'application/databases.html', context)
 
+
 class DatabaseView(View):
     def get(self, request, category):
         context = {
@@ -106,12 +107,25 @@ def delete_word(request, id, category):
     return HttpResponseRedirect(reverse("database", args=[category]))
 
 
+# class QuizStyleView(View):
+#     def get(self, request):
+#         with connection.cursor() as cursor:
+#             cursor.execute('SELECT DISTINCT category FROM application_words')
+#             rows = cursor.fetchall()
+#         categories = [category[0] for category in rows]
+#         context = {
+#             "categories": categories
+#         }
+#         print(categories)
+#         return render(request, "application/quiz-style.html", context)
+
+
 class QuizHomeView(View):
     def get(self, request):
         with connection.cursor() as cursor:
             cursor.execute('SELECT DISTINCT category FROM application_words')
-            rows = cursor.fetchall()
-        categories = [category[0] for category in rows]
+            category_rows = cursor.fetchall()
+        categories = [category[0] for category in category_rows]
         context = {
             "categories": categories
         }
@@ -119,10 +133,18 @@ class QuizHomeView(View):
         return render(request, "application/quiz-home.html", context)
 
 class QuizView(View):
-    def get(self, request, iterations, category):
+    def get(self, request, iterations, category, id=0, correct=0):
+        if id:
+            last_word = Words.objects.get(pk=id)
+            last_word.tries += 1
+            if correct:
+                last_word.correct_guesses += 1
+            else:
+                last_word.wrong_guesses +=1
+            last_word.save()
+        words = Words.objects.filter(category=category)
         counter = iterations
         iterations += 1
-        words = Words.objects.filter(category=category)
         print(words)
         words = [word for word in words]
         try:
