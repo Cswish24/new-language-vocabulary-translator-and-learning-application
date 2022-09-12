@@ -1,0 +1,12 @@
+just finished adding quiz statistic fields and having the quizview track right and wrong answers in the database.
+
+create new quiz category that quizzes on the most commonly missed problems
+    -create quiz data
+        -take quiz a bunch
+    -modify or create new html display
+
+    -create views logic to handle new quiz
+        -seperate or joined view?
+        -query all words in sql then sort? or sort in sql query?
+        
+    -give option to quiz on hard words in a category

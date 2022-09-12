@@ -107,17 +107,7 @@ def delete_word(request, id, category):
     return HttpResponseRedirect(reverse("database", args=[category]))
 
 
-# class QuizStyleView(View):
-#     def get(self, request):
-#         with connection.cursor() as cursor:
-#             cursor.execute('SELECT DISTINCT category FROM application_words')
-#             rows = cursor.fetchall()
-#         categories = [category[0] for category in rows]
-#         context = {
-#             "categories": categories
-#         }
-#         print(categories)
-#         return render(request, "application/quiz-style.html", context)
+
 
 
 class QuizHomeView(View):
@@ -131,6 +121,38 @@ class QuizHomeView(View):
         }
         print(categories)
         return render(request, "application/quiz-home.html", context)
+
+
+class QuizHardView(View):
+    def get(self, request, iterations, id=0, correct=0):
+        if id:
+            last_word = Words.objects.get(pk=id)
+            last_word.tries += 1
+            if correct:
+                last_word.correct_guesses += 1
+            else:
+                last_word.wrong_guesses +=1
+            last_word.save()
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT spanish_word, english_word, id FROM application_words WHERE ((100 * (correct_guesses/tries)) < 50)')
+            category_rows = cursor.fetchall()
+        words = [[category[0], category[1], category[2]] for category in category_rows]
+        print(words)
+        counter = iterations
+        iterations += 1
+        try:
+            words[counter]
+        except IndexError:
+            return HttpResponseRedirect(reverse("success"))
+        context = {
+            "spanish_word": words[counter][0],
+            "english_word": words[counter][1],
+            "id": words[counter][2],
+            "iterations": iterations
+        }
+        
+        return render(request, "application/quiz-game-hard.html", context)
+
 
 class QuizView(View):
     def get(self, request, iterations, category, id=0, correct=0):
