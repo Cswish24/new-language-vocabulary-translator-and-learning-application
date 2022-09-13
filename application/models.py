@@ -9,6 +9,7 @@ class Words(models.Model):
     tries = models.FloatField(default=0)
     wrong_guesses = models.FloatField(default=0)
     correct_guesses = models.FloatField(default=0)
+    percentage = models.FloatField(default=0)
 
 # class User(models.Model):
 #     id = models.BigAutoField(db_index=True, primary_key=True)

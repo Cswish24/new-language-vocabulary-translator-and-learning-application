@@ -12,7 +12,9 @@ urlpatterns = [
     path("database_update/<int:id>", views.ManualUpdateView.as_view(), name=("update")),
     path("database_delete/<int:id>/<str:category>", views.delete_word, name=("delete")),
     path("quiz-home", views.QuizHomeView.as_view(), name=("quiz-home")),
+    path("quiz-stat-home", views.QuizStatHomeView.as_view(), name=("quiz-stat-home")),
     path("quiz-game-hard/<int:iterations>/<int:id>/<int:correct>", views.QuizHardView.as_view(), name=("quiz-hard")),
     path("quiz-game/<str:category>/<int:iterations>/<int:id>/<int:correct>", views.QuizView.as_view(), name=("quiz")),
+    path("quiz-stat-view/<str:category>", views.StatView.as_view(), name=("stat-view")),
     path("success", views.SuccessView.as_view(), name=("success"))
 ]

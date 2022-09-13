@@ -122,6 +122,53 @@ class QuizHomeView(View):
         print(categories)
         return render(request, "application/quiz-home.html", context)
 
+class QuizStatHomeView(View):
+    def get(self, request):
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT DISTINCT category FROM application_words')
+            category_rows = cursor.fetchall()
+        categories = [category[0] for category in category_rows]
+        context = {
+            "categories": categories
+        }
+        print(categories)
+        return render(request, "application/quiz-stat-home.html", context)
+
+
+class StatView(View):
+    def get(self, request, category):
+        if category == "worst":
+            context = {
+                "words": Words.objects.all().order_by("percentage")[:15],
+                "category": category
+            }
+        elif category == "least":
+            context = {
+                "words": Words.objects.all().order_by("tries")[:15],
+                "category": category
+            }
+        elif category == "least-category":
+            with connection.cursor() as cursor:
+                cursor.execute('SELECT DISTINCT category FROM application_words')
+                category_rows = cursor.fetchall()
+            categories = [category[0] for category in category_rows]
+            context = {
+                "words": Words.objects.all().order_by("tries")[:15],
+                "category": category
+            }
+        elif category == "worst-category":
+            context = {
+                "words": Words.objects.all().order_by("tries")[:15],
+                "category": category
+            }
+        else:
+            context = {
+                "words": Words.objects.filter(category=category).order_by("percentage"),
+                "category": category
+            }
+        print(category)
+        return render(request, "application/quiz-stat-view.html", context)
+
 
 class QuizHardView(View):
     def get(self, request, iterations, id=0, correct=0):
@@ -132,6 +179,7 @@ class QuizHardView(View):
                 last_word.correct_guesses += 1
             else:
                 last_word.wrong_guesses +=1
+            last_word.percentage = 100*(last_word.correct_guesses/last_word.tries)
             last_word.save()
         with connection.cursor() as cursor:
             cursor.execute('SELECT spanish_word, english_word, id FROM application_words WHERE ((100 * (correct_guesses/tries)) < 50)')
@@ -163,6 +211,7 @@ class QuizView(View):
                 last_word.correct_guesses += 1
             else:
                 last_word.wrong_guesses +=1
+            last_word.percentage = 100*(last_word.correct_guesses/last_word.tries)
             last_word.save()
         words = Words.objects.filter(category=category)
         counter = iterations

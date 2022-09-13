@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% load static %} {% block css%} <link
+rel="stylesheet" href="{% static "application/quiz_databases.css" %}"> <link
+rel="stylesheet" href="{% static "application/database.css" %}"> {% endblock %}
+
+<title>
+  {% block title %}{{category|capfirst}} Quiz Statistics{% endblock %}
+</title>
+
+{% block content %}
+<div class="background">
+  <div class="main">
+    <div class="container">
+      <div class="container-flex">
+        <div class="container-header">
+          <h2 class="heading">{{category|capfirst}} Quiz Statistics</h2>
+          <p class="subheading">See your cumulative quiz results</p>
+        </div>
+
+        <div class="cat-box">
+          <!-- {% for word in words %}
+          <p>
+            {{word.english_word}}: {{word.spanish_word}}: attempts
+            {{word.tries|floatformat:"0" }}: correct
+            {{word.correct_guesses|floatformat:"0" }}: wrong
+            {{word.wrong_guesses|floatformat:"0" }}
+          </p>
+          {% endfor %} -->
+          <table>
+            <tr>
+              <th>English</th>
+              <th>Spanish</th>
+              <th>Tries</th>
+              <th>Correct</th>
+              <th>Wrong</th>
+              <th>Percentage</th>
+            </tr>
+            {% for word in words %}
+            <tr>
+              <td>{{word.english_word}}</td>
+              <td>{{word.spanish_word}}</td>
+              <td>{{word.tries|floatformat:"0"}}</td>
+              <td>{{word.correct_guesses|floatformat:"0"}}</td>
+              <td>{{word.wrong_guesses|floatformat:"0"}}</td>
+              <td>{{word.percentage|floatformat:"0"}}%</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
