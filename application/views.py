@@ -7,6 +7,7 @@ from django.views.generic.base import TemplateView
 from .models import Words
 from .forms import EnWordForm,EsWordForm, ManualWordForm
 from .translator_api import translate_en, translate_es
+from django.db.models import Avg, Max, Min, Count
 
 
 # Create your views here.
@@ -138,6 +139,8 @@ class QuizStatHomeView(View):
 class StatView(View):
     def get(self, request, category):
         if category == "worst":
+            categories= Words.objects.all().distinct('category')
+            print(categories)
             context = {
                 "words": Words.objects.all().order_by("percentage")[:15],
                 "category": category
@@ -157,6 +160,11 @@ class StatView(View):
                 "category": category
             }
         elif category == "worst-category":
+            categories= Words.objects.all().distinct('category').values("category")
+            print(categories)
+            for i in range(category_num['category__count']):
+                pass
+                
             context = {
                 "words": Words.objects.all().order_by("tries")[:15],
                 "category": category
@@ -170,36 +178,30 @@ class StatView(View):
         return render(request, "application/quiz-stat-view.html", context)
 
 
-class QuizHardView(View):
-    def get(self, request, iterations, id=0, correct=0):
-        if id:
-            last_word = Words.objects.get(pk=id)
-            last_word.tries += 1
-            if correct:
-                last_word.correct_guesses += 1
-            else:
-                last_word.wrong_guesses +=1
-            last_word.percentage = 100*(last_word.correct_guesses/last_word.tries)
-            last_word.save()
-        with connection.cursor() as cursor:
-            cursor.execute('SELECT spanish_word, english_word, id FROM application_words WHERE ((100 * (correct_guesses/tries)) < 50)')
-            category_rows = cursor.fetchall()
-        words = [[category[0], category[1], category[2]] for category in category_rows]
-        print(words)
-        counter = iterations
-        iterations += 1
-        try:
-            words[counter]
-        except IndexError:
-            return HttpResponseRedirect(reverse("success"))
-        context = {
-            "spanish_word": words[counter][0],
-            "english_word": words[counter][1],
-            "id": words[counter][2],
-            "iterations": iterations
-        }
+# class QuizHardView(View):
+#     def get(self, request, iterations, id=0, correct=0):
+#         if id:
+#             last_word = Words.objects.get(pk=id)
+#             last_word.tries += 1
+#             if correct:
+#                 last_word.correct_guesses += 1
+#             else:
+#                 last_word.wrong_guesses +=1
+#             last_word.percentage = 100*(last_word.correct_guesses/last_word.tries)
+#             last_word.save()
+#         words = Words.objects.all().order_by("percentage")[:15]
+#         counter = iterations
+#         iterations += 1
+#         try:
+#             words[counter]
+#         except IndexError:
+#             return HttpResponseRedirect(reverse("success"))
+#         context = {
+#             "words": words[counter],
+#             "iterations": iterations
+#         }
         
-        return render(request, "application/quiz-game-hard.html", context)
+#         return render(request, "application/quiz-game-hard.html", context)
 
 
 class QuizView(View):
@@ -213,18 +215,24 @@ class QuizView(View):
                 last_word.wrong_guesses +=1
             last_word.percentage = 100*(last_word.correct_guesses/last_word.tries)
             last_word.save()
-        words = Words.objects.filter(category=category)
+        if category == "None":
+            words = Words.objects.all().order_by("percentage")[:15]
+            hard_quiz = True
+        else:            
+            words = Words.objects.filter(category=category).order_by("id")
+            hard_quiz = False
         counter = iterations
         iterations += 1
         print(words)
-        words = [word for word in words]
+        lwords = [word for word in words]
         try:
-            words[counter]
+            lwords[counter]
         except IndexError:
             return HttpResponseRedirect(reverse("success"))
         context = {
-            "words": words[counter],
-            "iterations": iterations
+            "words": lwords[counter],
+            "iterations": iterations,
+            "hard_quiz": hard_quiz,
         }
         
         return render(request, "application/quiz-game.html", context)

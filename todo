@@ -2,4 +2,6 @@ added quiz on commonly missed words
 
 Statistics page on most commonly missed words, hardest categories, least practiced categories
 
+Still need to figure out sql query to generate hardest categories, least practiced categories in order
 
+migrate db to postgresql database

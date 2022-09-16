@@ -30,9 +30,14 @@
     </div>
   </div>
 </div>
-
+{% if hard_quiz %}
+  <a class="btn " href="{% url "quiz" "None" iterations words.id 1 %}">Correct</a>
+  <a class="btn " href="{% url "quiz" "None" iterations words.id 0 %}">Incorrect</a>
+{% else %}
 <a class="btn " href="{% url "quiz" words.category iterations words.id 1 %}">Correct</a>
 <a class="btn " href="{% url "quiz" words.category iterations words.id 0 %}">Incorrect</a>
+
+{% endif %}
 
 <a class="btn cspan" href="{% url "quiz-home"%}">Back to Quiz Home</a>
 </div>
