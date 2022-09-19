@@ -54,3 +54,11 @@
 .cspan {
   grid-column: 1/-1;
 }
+
+.quiz-header {
+  text-align: center;
+}
+
+.quiz-subheading {
+  text-align: center;
+}

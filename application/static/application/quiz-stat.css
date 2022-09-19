@@ -1,12 +1,22 @@
-.container-flex {
-  width: 75rem;
+.heading {
+  text-align: center;
 }
 
-.cat-box {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1.6rem;
-  margin-bottom: 0.8rem;
+.subheading {
+  text-align: center;
+}
+
+.container-flex {
+  width: 120rem;
+}
+
+tr {
+  font-size: 1.8rem;
+  text-align: left;
+}
+
+table {
+  margin-bottom: 3.2rem;
 }
 
 .link {
@@ -20,14 +30,6 @@
 .link:hover,
 .link:active {
   color: #ff6b6b;
-}
-
-.heading {
-  text-align: center;
-}
-
-.subheading {
-  text-align: center;
 }
 
 .stat-link {

@@ -5,11 +5,15 @@
 .container-header {
   width: 50%;
   align-self: center;
-  transform: translateX(25%);
+}
+
+.cat-box {
+  align-self: center;
+  column-gap: 12.8rem;
 }
 
 .cat-box p {
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 
 .update:link,

@@ -1,0 +1,16 @@
+.link {
+  text-decoration: none;
+  color: #333;
+  background-color: #ffec99;
+  border: none;
+  font-size: 2rem;
+}
+
+.link:hover,
+.link:active {
+  color: #ff6b6b;
+}
+.heading {
+  text-align: center;
+  padding-bottom: 3.2rem;
+}

@@ -1,6 +1,7 @@
-{% extends "base.html" %} {% load static %} {% block css%} <link
-rel="stylesheet" href="{% static "application/quiz_databases.css" %}"> <link
-rel="stylesheet" href="{% static "application/database.css" %}"> {% endblock %}
+{% extends "base.html" %} {% load static %} {% block css%} 
+<link
+rel="stylesheet" href="{% static "application/quiz-stat.css" %}"> 
+{% endblock %}
 
 <title>
   {% block title %}{{category|capfirst}} Quiz Statistics{% endblock %}
@@ -16,16 +17,8 @@ rel="stylesheet" href="{% static "application/database.css" %}"> {% endblock %}
           <p class="subheading">See your cumulative quiz results</p>
         </div>
 
-        <div class="cat-box">
-          <!-- {% for word in words %}
-          <p>
-            {{word.english_word}}: {{word.spanish_word}}: attempts
-            {{word.tries|floatformat:"0" }}: correct
-            {{word.correct_guesses|floatformat:"0" }}: wrong
-            {{word.wrong_guesses|floatformat:"0" }}
-          </p>
-          {% endfor %} -->
           <table>
+            {% if not categories %}
             <tr>
               <th>English</th>
               <th>Spanish</th>
@@ -43,8 +36,25 @@ rel="stylesheet" href="{% static "application/database.css" %}"> {% endblock %}
               <td>{{word.wrong_guesses|floatformat:"0"}}</td>
               <td>{{word.percentage|floatformat:"0"}}%</td>
             </tr>
-            {% endfor %}
+            {% endfor %} {% else %}
+            <tr>
+              <th>Category</th>
+              <th>Tries</th>
+              <th>Correct</th>
+              <th>Wrong</th>
+              <th>Percentage</th>
+            </tr>
+            {% for word in words %}
+            <tr>
+              <td>{{word.category}}</td>
+              <td>{{word.sum_tries|floatformat:"0"}}</td>
+              <td>{{word.sum_correct_guesses|floatformat:"0"}}</td>
+              <td>{{word.sum_wrong_guesses|floatformat:"0"}}</td>
+              <td>{{word.avg_percentage|floatformat:"0"}}%</td>
+            </tr>
+            {% endfor %} {% endif %}
           </table>
+          <a href="{% url "quiz-stat-home" %}" class="link"><h2 class="heading stat-link">See Quiz Statistics</h2></a>
         </div>
       </div>
     </div>

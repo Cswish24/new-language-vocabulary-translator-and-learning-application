@@ -7,7 +7,7 @@ from django.views.generic.base import TemplateView
 from .models import Words
 from .forms import EnWordForm,EsWordForm, ManualWordForm
 from .translator_api import translate_en, translate_es
-from django.db.models import Avg, Max, Min, Count
+from django.db.models import Avg, Max, Min, Count, Sum
 
 
 # Create your views here.
@@ -143,65 +143,43 @@ class StatView(View):
             print(categories)
             context = {
                 "words": Words.objects.all().order_by("percentage")[:15],
-                "category": category
+                "category": category,
+                "categories": False
             }
         elif category == "least":
             context = {
                 "words": Words.objects.all().order_by("tries")[:15],
-                "category": category
+                "category": category,
+                "categories": False
             }
         elif category == "least-category":
-            with connection.cursor() as cursor:
-                cursor.execute('SELECT DISTINCT category FROM application_words')
-                category_rows = cursor.fetchall()
-            categories = [category[0] for category in category_rows]
+            words = Words.objects.values('category').annotate(sum_tries=Sum('tries'), sum_correct_guesses=Sum('correct_guesses'), sum_wrong_guesses=Sum('wrong_guesses'), avg_percentage=100*(Sum('correct_guesses')/Sum('tries'))).order_by('sum_tries')[:15]
+            print(words)
             context = {
-                "words": Words.objects.all().order_by("tries")[:15],
-                "category": category
+                "words": words,
+                "category": category,
+                "categories": True
             }
-        elif category == "worst-category":
-            categories= Words.objects.all().distinct('category').values("category")
-            print(categories)
-            for i in range(category_num['category__count']):
-                pass
-                
+        elif category == "worst-categories":
+            # with connection.cursor() as cursor:
+            #     cursor.execute('SELECT category, SUM(tries), SUM(correct_guesses), SUM(wrong_guesses), SUM(correct_guesses)/SUM(tries) FROM application_words GROUP BY category ORDER BY SUM(correct_guesses)/SUM(tries)')
+            #     category_rows = cursor.fetchall()
+            # print(category_rows)
+            words = Words.objects.values('category').annotate(sum_tries=Sum('tries'), sum_correct_guesses=Sum('correct_guesses'), sum_wrong_guesses=Sum('wrong_guesses'), avg_percentage=100*(Sum('correct_guesses')/Sum('tries'))).order_by('avg_percentage')[:15]
+            print(words)
             context = {
-                "words": Words.objects.all().order_by("tries")[:15],
-                "category": category
+                "words": words,
+                "category": category,
+                "categories": True
             }
         else:
             context = {
                 "words": Words.objects.filter(category=category).order_by("percentage"),
-                "category": category
+                "category": category,
+                "categories": False
             }
         print(category)
         return render(request, "application/quiz-stat-view.html", context)
-
-
-# class QuizHardView(View):
-#     def get(self, request, iterations, id=0, correct=0):
-#         if id:
-#             last_word = Words.objects.get(pk=id)
-#             last_word.tries += 1
-#             if correct:
-#                 last_word.correct_guesses += 1
-#             else:
-#                 last_word.wrong_guesses +=1
-#             last_word.percentage = 100*(last_word.correct_guesses/last_word.tries)
-#             last_word.save()
-#         words = Words.objects.all().order_by("percentage")[:15]
-#         counter = iterations
-#         iterations += 1
-#         try:
-#             words[counter]
-#         except IndexError:
-#             return HttpResponseRedirect(reverse("success"))
-#         context = {
-#             "words": words[counter],
-#             "iterations": iterations
-#         }
-        
-#         return render(request, "application/quiz-game-hard.html", context)
 
 
 class QuizView(View):

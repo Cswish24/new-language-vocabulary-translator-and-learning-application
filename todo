@@ -1,7 +1,23 @@
-added quiz on commonly missed words
+    added quiz on commonly missed words
 
-Statistics page on most commonly missed words, hardest categories, least practiced categories
+    Statistics page on most commonly missed words, hardest categories, least practiced categories
 
-Still need to figure out sql query to generate hardest categories, least practiced categories in order
+    Still need to figure out sql query to generate hardest categories, least practiced categories in order
 
-migrate db to postgresql database
+    migrate db to postgresql database
+
+Completed 9/19
+
+    fix html css for Statistics pages
+    fix typo on home page ...decribe to describe...
+    clean up deprecated views as well as html
+    add back to home stats from stats view
+    add back to quiz home from home stats
+
+    end of version???
+    commit then merge then push
+
+Completed 9/19
+
+    Create new version branch, start working on users and authentication?
+    make user specific data and compile data from all users to suggest new features for users.
