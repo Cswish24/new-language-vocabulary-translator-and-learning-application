@@ -1,0 +1,38 @@
+{% extends "base.html" %} {% load static %} {% block css%} <link
+rel="stylesheet" href="{% static "application/login.css" %}"> <link
+rel="stylesheet" href="{% static "application/translator.css" %}"> {% endblock%}
+
+<title>{% block title %}Login page{% endblock %}</title>
+
+{% block content %}
+
+<div class="background">
+  <div class="main">
+    <div class="container">
+      <div class="container-flex">
+        <h2 class="heading">Account Login</h2>
+
+        <form method="POST">
+          <div class="grid">
+            {% csrf_token %}{{form}}
+            <!-- {% for form_field in form %}
+            <div class="form-label" >
+                {{ form_field.label_tag}}
+            </div>
+            <div class="form-field">
+                {{ form_field }}
+            </div>
+            
+            {% endfor %} -->
+            <p class="subheading">
+              Don't have an account? Sign up
+              <a href="/sign-up" class="signup-link"><b>here</b></a>
+            </p>
+            <button type="submit" class="btn">Log in</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -21,3 +21,7 @@ Completed 9/19
 
     Create new version branch, start working on users and authentication?
     make user specific data and compile data from all users to suggest new features for users.
+
+---
+
+    Create ability to create users first, create relationship with words second.

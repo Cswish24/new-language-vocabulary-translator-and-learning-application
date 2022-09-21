@@ -18,12 +18,21 @@
         <nav class="navigation">
             <h1  class="main-header">Spanish English Learning app</h1>
             <div class="nav-right">
-            <div class="nav">
-                <a class="nav-link" href="{% url "databases" %}">View Database</a>
-            </div>
-            <div class="nav">
-                <a class="nav-link" href="{% url 'home-page' %}">Home</a>
-            </div>
+                {% if user.is_authenticated %}
+                <div class="nav">
+                    <a class="nav-link" href="{% url "databases" %}">View Database</a>
+                </div>
+                <div class="nav">
+                    <a class="nav-link" href="{% url 'home-page' %}">Home</a>
+                </div>
+                <div class="nav">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </div>
+                {% else %}
+                <div class="nav">
+                    <a class="nav-link" href="/login">Login</a>
+                </div>
+                {% endif %}
         </div>
         </div>
     </header>  

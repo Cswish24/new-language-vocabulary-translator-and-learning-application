@@ -5,17 +5,35 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic.base import TemplateView
 from .models import Words
-from .forms import EnWordForm,EsWordForm, ManualWordForm
+from .forms import EnWordForm,EsWordForm, ManualWordForm, RegisterForm
 from .translator_api import translate_en, translate_es
 from django.db.models import Avg, Max, Min, Count, Sum
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 
 
 # Create your views here.
-
-
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class HomeView(TemplateView):
     template_name = "application/home.html"
 
+
+
+def sign_up(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return HttpResponseRedirect(reverse('home-page'))
+    else: 
+        form = RegisterForm()
+    
+    return render(request, 'registration/sign-up.html', {"form": form})
+
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class EnTranslateView(View):
     def get(self, request):
         context = {
@@ -31,6 +49,7 @@ class EnTranslateView(View):
             word.save()
             return HttpResponseRedirect(reverse("en-translator"))
 
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class EsTranslateView(View):
     def get(self, request):
         context = {
@@ -46,7 +65,8 @@ class EsTranslateView(View):
             word.save()
             return HttpResponseRedirect(reverse("es-translator"))
 
-
+            
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class ManualTranslateView(View):
     def get(self, request):
         context = {
@@ -61,7 +81,8 @@ class ManualTranslateView(View):
             return HttpResponseRedirect(reverse("manual-translator"))
 
 
-
+            
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class DatabaseSelectionView(View):
     def get(self, request):
         with connection.cursor() as cursor:
@@ -73,7 +94,8 @@ class DatabaseSelectionView(View):
         }
         return render(request, 'application/databases.html', context)
 
-
+            
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class DatabaseView(View):
     def get(self, request, category):
         context = {
@@ -83,7 +105,8 @@ class DatabaseView(View):
         print(category)
         return render(request, "application/database.html", context)
 
-
+            
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class ManualUpdateView(View):
     def get(self, request, id):
         context = {
@@ -103,14 +126,13 @@ class ManualUpdateView(View):
             return HttpResponseRedirect(reverse("database", args=[category]))
 
 
+@login_required(login_url='/login/')
 def delete_word(request, id, category):
     Words.objects.filter(pk=id).delete()
     return HttpResponseRedirect(reverse("database", args=[category]))
 
-
-
-
-
+            
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class QuizHomeView(View):
     def get(self, request):
         with connection.cursor() as cursor:
@@ -122,7 +144,8 @@ class QuizHomeView(View):
         }
         print(categories)
         return render(request, "application/quiz-home.html", context)
-
+            
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class QuizStatHomeView(View):
     def get(self, request):
         with connection.cursor() as cursor:
@@ -135,7 +158,8 @@ class QuizStatHomeView(View):
         print(categories)
         return render(request, "application/quiz-stat-home.html", context)
 
-
+            
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class StatView(View):
     def get(self, request, category):
         if category == "worst":
@@ -181,7 +205,8 @@ class StatView(View):
         print(category)
         return render(request, "application/quiz-stat-view.html", context)
 
-
+            
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class QuizView(View):
     def get(self, request, iterations, category, id=0, correct=0):
         if id:
@@ -215,6 +240,7 @@ class QuizView(View):
         
         return render(request, "application/quiz-game.html", context)
 
-
+            
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class SuccessView(TemplateView):
     template_name = 'success.html'
