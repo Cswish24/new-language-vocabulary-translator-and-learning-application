@@ -23,7 +23,7 @@
             <p> Spanish word: </p><p>{{word.spanish_word}}</p>
             <p> Category: </p><p>{{word.category}}</p>
             
-            <a class="btn delete" href="{% url "delete" word.id word.category %}" method="delete">Delete</a>
+            <a class="btn delete" href="{% url "delete" word.id word.category personal%}" method="delete">Delete</a>
             {% endfor %}
         </div>
     </div>
@@ -33,7 +33,7 @@
         <div class="container-flex">
             <h2 class="heading">Update</h2>
         <p class="subheading">All fields must be complete</p>
-            <form action="{% url "update" id %}" method="POST">
+            <form action="{% url "update" id personal %}" method="POST">
                 <div class="grid">
                     {% csrf_token %}
                     {% for form_field in word_form %}

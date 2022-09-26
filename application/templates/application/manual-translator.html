@@ -18,7 +18,7 @@
         <h2 class="heading">Enter a manual translation</h2>
         <p class="subheading">Pick a category you wish to associate the word with. Quizzes and quiz statistics will be generated for each category you create.</p>
 
-        <form action="{% url "en-translator" %}" method="POST">
+        <form action="{% url "manual-translator" %}" method="POST">
             <div class="grid">
             {% csrf_token %}
             {% for form_field in word_form %}

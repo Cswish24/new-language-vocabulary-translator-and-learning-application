@@ -1,3 +1,4 @@
+from unicodedata import category
 from django.db import connection
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -11,6 +12,7 @@ from django.db.models import Avg, Max, Min, Count, Sum
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib.auth import get_user
 
 
 
@@ -45,8 +47,22 @@ class EnTranslateView(View):
         word_form = EnWordForm(request.POST)
         if word_form.is_valid():
             word = word_form.save(commit=False)
+            with connection.cursor() as cursor:
+                cursor.execute('SELECT DISTINCT category FROM application_words')
+                rows = cursor.fetchall()
+            categories = [category[0] for category in rows]
+            print(categories)
+            for category in categories:
+                if word.category == category:
+                    existing_words = Words.objects.filter(category=category)
+                    for existing_word in existing_words:
+                        if existing_word.english_word == word.english_word:
+                            existing_word.user.add(request.user)
+                            return HttpResponseRedirect(reverse("en-translator"))
+
             word.spanish_word = translate_en(word.english_word)
             word.save()
+            word.user.add(request.user)
             return HttpResponseRedirect(reverse("en-translator"))
 
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
@@ -61,9 +77,24 @@ class EsTranslateView(View):
         word_form = EsWordForm(request.POST)
         if word_form.is_valid():
             word = word_form.save(commit=False)
+            with connection.cursor() as cursor:
+                cursor.execute('SELECT DISTINCT category FROM application_words')
+                rows = cursor.fetchall()
+            categories = [category[0] for category in rows]
+            print(categories)
+            for category in categories:
+                if word.category == category:
+                    existing_words = Words.objects.filter(category=category)
+                    for existing_word in existing_words:
+                        if existing_word.spanish_word == word.spanish_word:
+                            existing_word.user.add(request.user)
+                            return HttpResponseRedirect(reverse("es-translator"))
+
             word.english_word = translate_es(word.spanish_word)
             word.save()
+            word.user.add(request.user)
             return HttpResponseRedirect(reverse("es-translator"))
+
 
             
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
@@ -77,59 +108,91 @@ class ManualTranslateView(View):
     def post(self, request):
         word_form = ManualWordForm(request.POST)
         if word_form.is_valid():
-            word_form.save()
+            word = word_form.save(commit=False)
+            with connection.cursor() as cursor:
+                cursor.execute('SELECT DISTINCT category FROM application_words')
+                rows = cursor.fetchall()
+            categories = [category[0] for category in rows]
+            print(categories)
+            for category in categories:
+                if word.category == category:
+                    existing_words = Words.objects.filter(category=category)
+                    for existing_word in existing_words:
+                        if existing_word.spanish_word == word.spanish_word and existing_word.english_word == word.english_word:
+                            existing_word.user.add(request.user)
+                            return HttpResponseRedirect(reverse("manual-translator"))
+            word.save()
+            word.user.add(request.user)
             return HttpResponseRedirect(reverse("manual-translator"))
 
+
+
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
+class PersonalOrTotalDatabaseSelectionView(View):
+    def get(self, request):
+        return render(request, 'application/personal_or_total_database.html')
 
             
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
 class DatabaseSelectionView(View):
-    def get(self, request):
-        with connection.cursor() as cursor:
-            cursor.execute('SELECT DISTINCT category FROM application_words')
-            rows = cursor.fetchall()
-        categories = [category[0] for category in rows]
+    def get(self, request, personal):
+        if personal == "true":
+            categories = Words.objects.filter(user__id=request.user.id).distinct('category').values('category')
+            categories = [category['category'] for category in categories]
+            print(categories)
+        else:
+            with connection.cursor() as cursor:
+                cursor.execute('SELECT DISTINCT category FROM application_words')
+                rows = cursor.fetchall()
+            categories = [category[0] for category in rows]
         context = {
-            'categories': categories
+            'categories': categories,
+            'personal' : personal
         }
         return render(request, 'application/databases.html', context)
 
             
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
 class DatabaseView(View):
-    def get(self, request, category):
+    def get(self, request, category, personal):
+        if personal == "true":
+            words = Words.objects.filter(user__id=request.user.id).filter(category=category)
+        else:
+            words = Words.objects.filter(category=category)
         context = {
-            "words": Words.objects.filter(category=category),
-            "category": category
+            "words": words,
+            "category": category,
+            "personal": personal
         }
-        print(category)
         return render(request, "application/database.html", context)
+        
 
             
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
 class ManualUpdateView(View):
-    def get(self, request, id):
+    def get(self, request, id, personal):
         context = {
             "update_word": Words.objects.filter(pk=id),
             "word_form": ManualWordForm(),
-            "id": id
+            "id": id,
+            "personal": personal
         }
         return render(request, "application/update.html", context)
     
-    def post(self, request, id):
+    def post(self, request, id, personal):
         word_form = ManualWordForm(request.POST)
         if word_form.is_valid():
             Words.objects.filter(pk=id).delete()
             category = str(word_form).split('category')[2].split('"')[2]
             print(category)
             word_form.save()
-            return HttpResponseRedirect(reverse("database", args=[category]))
+            return HttpResponseRedirect(reverse("database", args=[category, personal]))
 
 
 @login_required(login_url='/login/')
-def delete_word(request, id, category):
-    Words.objects.filter(pk=id).delete()
-    return HttpResponseRedirect(reverse("database", args=[category]))
+def delete_word(request, id, category, personal):
+    Words.objects.get(pk=id).user.remove(request.user)
+    return HttpResponseRedirect(reverse("database", args=[category, personal]))
 
             
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
@@ -206,9 +269,45 @@ class StatView(View):
         return render(request, "application/quiz-stat-view.html", context)
 
             
+# @method_decorator(login_required(login_url='/login/'), name='dispatch')
+# class QuizView(View):
+#     def get(self, request, iterations, category, id=0, correct=0):
+#         if id:
+#             last_word = Words.objects.get(pk=id)
+#             last_word.tries += 1
+#             if correct:
+#                 last_word.correct_guesses += 1
+#             else:
+#                 last_word.wrong_guesses +=1
+#             last_word.percentage = 100*(last_word.correct_guesses/last_word.tries)
+#             last_word.save()
+#         if category == "None":
+#             words = Words.objects.all().order_by("percentage")[:15]
+#             hard_quiz = True
+#         else:            
+#             words = Words.objects.filter(category=category).order_by("id")
+#             hard_quiz = False
+#         counter = iterations
+#         iterations += 1
+#         print(words)
+#         lwords = [word for word in words]
+#         try:
+#             lwords[counter]
+#         except IndexError:
+#             return HttpResponseRedirect(reverse("success"))
+#         context = {
+#             "words": lwords[counter],
+#             "iterations": iterations,
+#             "hard_quiz": hard_quiz,
+#         }
+        
+#         return render(request, "application/quiz-game.html", context)
+
+
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
 class QuizView(View):
     def get(self, request, iterations, category, id=0, correct=0):
+        print(Words.objects.filter(user__id=request.user.id).filter(category=category))
         if id:
             last_word = Words.objects.get(pk=id)
             last_word.tries += 1

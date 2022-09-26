@@ -12,6 +12,8 @@ class Words(models.Model):
     wrong_guesses = models.FloatField(default=0)
     correct_guesses = models.FloatField(default=0)
     percentage = models.FloatField(default=0)
+    user = models.ManyToManyField(User)
+    
 
 # class User(models.Model):
 #     id = models.BigAutoField(db_index=True, primary_key=True)

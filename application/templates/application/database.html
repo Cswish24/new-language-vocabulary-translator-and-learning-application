@@ -22,8 +22,8 @@
                 {% for word in words %}
                     <p>
                         {{word.english_word}}: {{word.spanish_word}}&ensp;
-                        <a class="update" href="{% url "update" word.id%}" method="post"> Update &ensp;</a>  
-                        {% comment %} <a class="delete" href="{% url "delete" word.id category %}" method="delete">Delete </a> {% endcomment %}
+                        <a class="update" href="{% url "update" word.id personal %}" method="post"> Update &ensp;</a>  
+                        {% comment %} <a class="delete" href="{% url "delete" word.id category personal %}" method="delete">Delete </a> {% endcomment %}
                     </p>
                 {% endfor %}
          

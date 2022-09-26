@@ -16,7 +16,7 @@ class RegisterForm(UserCreationForm):
 class EnWordForm(forms.ModelForm):
     class Meta:
         model = Words
-        exclude = ['spanish_word', 'slug', 'tries', 'wrong_guesses', 'correct_guesses', 'percentage' ]
+        exclude = ['spanish_word', 'slug', 'tries', 'wrong_guesses', 'correct_guesses', 'percentage', 'user' ]
         labels = {
             "english_word": "English word"
         }
@@ -24,7 +24,7 @@ class EnWordForm(forms.ModelForm):
 class EsWordForm(forms.ModelForm):
     class Meta:
         model = Words
-        exclude = ['english_word', 'slug', 'tries', 'wrong_guesses', 'correct_guesses', 'percentage']
+        exclude = ['english_word', 'slug', 'tries', 'wrong_guesses', 'correct_guesses', 'percentage', 'user']
         labels = {
             "spanish_word": "Spanish word"
         }
@@ -32,7 +32,7 @@ class EsWordForm(forms.ModelForm):
 class ManualWordForm(forms.ModelForm):
     class Meta:
         model = Words
-        exclude = ['slug', 'tries', 'wrong_guesses', 'correct_guesses', 'percentage']
+        exclude = ['slug', 'tries', 'wrong_guesses', 'correct_guesses', 'percentage', 'user']
         labels = {
             "spanish_word": "Spanish word",
             "english_word": "English word"

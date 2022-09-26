@@ -20,7 +20,7 @@
             <div class="nav-right">
                 {% if user.is_authenticated %}
                 <div class="nav">
-                    <a class="nav-link" href="{% url "databases" %}">View Database</a>
+                    <a class="nav-link" href="{% url "personal_or_total_database" %}">View Database</a>
                 </div>
                 <div class="nav">
                     <a class="nav-link" href="{% url 'home-page' %}">Home</a>

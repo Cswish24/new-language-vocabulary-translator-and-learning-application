@@ -25,3 +25,12 @@ Completed 9/19
 ---
 
     Create ability to create users first, create relationship with words second.
+
+---
+
+    Ability to create users, login, and restrict access to logged in users has been implemented
+
+Completed 9/21
+
+    -Need to fix UI for login and logout pages. auto form validation is built for a single column flex box, specifically the failed form validation error responses take up a cell to themselves.
+    -try linking users to words and see if many to many relationship between users and words will let each individual have a seperate sorted access for their own categories and protection from modifying another users words and protection from deleting words from the main table with links to other users words.
