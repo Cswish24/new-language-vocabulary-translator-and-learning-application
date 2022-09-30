@@ -1,11 +1,10 @@
-from unicodedata import category
 from django.db import connection
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic.base import TemplateView
-from .models import Words
+from .models import UsersWords, Words
 from .forms import EnWordForm,EsWordForm, ManualWordForm, RegisterForm
 from .translator_api import translate_en, translate_es
 from django.db.models import Avg, Max, Min, Count, Sum
@@ -13,6 +12,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth import get_user
+from django.db.utils import ProgrammingError
 
 
 
@@ -51,7 +51,7 @@ class EnTranslateView(View):
                 cursor.execute('SELECT DISTINCT category FROM application_words')
                 rows = cursor.fetchall()
             categories = [category[0] for category in rows]
-            print(categories)
+
             for category in categories:
                 if word.category == category:
                     existing_words = Words.objects.filter(category=category)
@@ -59,7 +59,6 @@ class EnTranslateView(View):
                         if existing_word.english_word == word.english_word:
                             existing_word.user.add(request.user)
                             return HttpResponseRedirect(reverse("en-translator"))
-
             word.spanish_word = translate_en(word.english_word)
             word.save()
             word.user.add(request.user)
@@ -194,18 +193,28 @@ def delete_word(request, id, category, personal):
     Words.objects.get(pk=id).user.remove(request.user)
     return HttpResponseRedirect(reverse("database", args=[category, personal]))
 
+
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
+class WhichQuizzesView(View):
+    def get(self, request):
+        return render(request, 'application/which_quizzes.html')
+            
             
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
 class QuizHomeView(View):
-    def get(self, request):
-        with connection.cursor() as cursor:
-            cursor.execute('SELECT DISTINCT category FROM application_words')
-            category_rows = cursor.fetchall()
-        categories = [category[0] for category in category_rows]
+    def get(self, request, personal):
+        if personal =="true":
+            categories = Words.objects.filter(user__id=request.user.id).distinct('category').values('category')
+            categories = [category['category'] for category in categories]
+        else:
+            with connection.cursor() as cursor:
+                cursor.execute('SELECT DISTINCT category FROM application_words')
+                category_rows = cursor.fetchall()
+            categories = [category[0] for category in category_rows]
         context = {
-            "categories": categories
+            "categories": categories,
+            "personal": personal
         }
-        print(categories)
         return render(request, "application/quiz-home.html", context)
             
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
@@ -303,29 +312,52 @@ class StatView(View):
         
 #         return render(request, "application/quiz-game.html", context)
 
+def score_calculator(request, id, correct):
+    last_word = Words.objects.get(pk=id)
+    try:
+        last_word_user = UsersWords.objects.filter(user_id_id=request.user.id).get(words_id_id=id)
+    except UsersWords.DoesNotExist:
+        last_word_user = None
+    print(last_word_user)
+    if last_word_user:
+        last_word_user.tries += 1
+    last_word.tries += 1
+    if correct:
+        last_word.correct_guesses += 1
+        if last_word_user:
+            last_word_user.correct_guesses += 1
+    else:
+        last_word.wrong_guesses +=1
+        if last_word_user:
+            last_word_user.wrong_guesses += 1
+    last_word.percentage = 100*(last_word.correct_guesses/last_word.tries)
+    last_word.save()
+    if last_word_user:
+        last_word_user.percentage = 100*(last_word_user.correct_guesses/last_word_user.tries)
+        last_word_user.save()
+
 
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
 class QuizView(View):
-    def get(self, request, iterations, category, id=0, correct=0):
-        print(Words.objects.filter(user__id=request.user.id).filter(category=category))
+    def get(self, request, iterations, category, personal, id=0, correct=0):
         if id:
-            last_word = Words.objects.get(pk=id)
-            last_word.tries += 1
-            if correct:
-                last_word.correct_guesses += 1
+            score_calculator(request, id, correct)
+        if personal == "true":
+            if category == "None":
+                words= Words.objects.filter(user__id=request.user.id).order_by("percentage")[:15]
+                hard_quiz = True
             else:
-                last_word.wrong_guesses +=1
-            last_word.percentage = 100*(last_word.correct_guesses/last_word.tries)
-            last_word.save()
-        if category == "None":
-            words = Words.objects.all().order_by("percentage")[:15]
-            hard_quiz = True
-        else:            
-            words = Words.objects.filter(category=category).order_by("id")
-            hard_quiz = False
+                words = Words.objects.filter(user__id=request.user.id).filter(category=category).order_by("id")
+                hard_quiz = False
+        else:
+            if category == "None":
+                words = Words.objects.all().order_by("percentage")[:15]
+                hard_quiz = True
+            else:            
+                words = Words.objects.filter(category=category).order_by("id")
+                hard_quiz = False
         counter = iterations
         iterations += 1
-        print(words)
         lwords = [word for word in words]
         try:
             lwords[counter]
@@ -335,6 +367,7 @@ class QuizView(View):
             "words": lwords[counter],
             "iterations": iterations,
             "hard_quiz": hard_quiz,
+            "personal": personal
         }
         
         return render(request, "application/quiz-game.html", context)

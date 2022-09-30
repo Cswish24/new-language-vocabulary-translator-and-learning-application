@@ -33,4 +33,12 @@ Completed 9/19
 Completed 9/21
 
     -Need to fix UI for login and logout pages. auto form validation is built for a single column flex box, specifically the failed form validation error responses take up a cell to themselves.
-    -try linking users to words and see if many to many relationship between users and words will let each individual have a seperate sorted access for their own categories and protection from modifying another users words and protection from deleting words from the main table with links to other users words.
+    -try linking users to words and see if many to many relationship between users and words will let each individual have a seperate sorted access for their own categories and protection from modifying another users words.
+
+    -What was Actually completed: Created many to many relationship between users and words, auto create this relationship every time a word is translated to the logged in user, if word already exists in the collective database, just create relationship to this word from user. seperate database views created for user specific words.
+
+Completed 9/26
+
+    -Still Need to fix UI for login and logout pages. auto form validation is built for a single column flex box, specifically the failed form validation error responses take up a cell to themselves.
+
+    -Need to create user specific quizzes and user specific statistics. not sure how to collect stats for the specific user yet. have to maybe form another table?
