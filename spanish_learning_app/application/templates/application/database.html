@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css%}
+<link rel="stylesheet" href="{% static "application/quiz_databases.css" %}">
+<link rel="stylesheet" href="{% static "application/database.css" %}">
+{% endblock %}
+
+<title>{% block title %}{{category|capfirst}} Database{% endblock %}</title>
+
+{% block content %}
+<div class="background">
+    <div class="main">
+
+<div class="container">
+    <div class="container-flex">
+        <div class="container-header">
+            <h2 class="heading">{{category|capfirst}} Database</h2>
+            <p class="subheading">Update or delete words from the database</p>
+        </div>
+       
+            <div class="cat-box">
+                {% for word in words %}
+                    <p>
+                        {{word.english_word}}: {{word.spanish_word}}&ensp;
+                        <a class="update" href="{% url "update" word.id personal %}" method="post"> Update &ensp;</a>  
+                        {% comment %} <a class="delete" href="{% url "delete" word.id category personal %}" method="delete">Delete </a> {% endcomment %}
+                    </p>
+                {% endfor %}
+         
+         </div>
+
+    </div> 
+</div>
+</div>
+</div>
+{% endblock content %}

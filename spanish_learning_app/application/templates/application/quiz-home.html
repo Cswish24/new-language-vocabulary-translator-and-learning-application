@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css%}
+<link rel="stylesheet" href="{% static "application/quiz_databases.css" %}">
+{% endblock %}
+
+<title>{% block title %}En-Es Translator{% endblock %}</title>
+
+{% block content %}
+<div class="background">
+    <div class="main">
+
+<div class="container">
+    <div class="container-flex">
+        <h2 class="heading">Select a quiz</h2>
+        <p class="subheading">Which vocabulary category do you wish to sharpen today?</p>
+
+       
+            <div class="cat-box">
+              {% for category in categories %}
+              <a href="{% url "quiz" category 0 personal 0 0 %}" class="link">{{category|capfirst}} Quiz</a>
+              {% endfor %}
+              <a href="{% url "quiz" "None" 0 personal 0 0 %}" class="link">Hard Words Quiz</a>
+         
+         </div>
+
+         
+
+    </div> 
+</div>
+</div>
+</div>
+{% endblock content %}

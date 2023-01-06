@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.flex-or {
+  display: flex;
+  gap: 12rem;
+}
+
+.gap {
+  gap: 1.2rem;
+}
+
+.delete {
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+}

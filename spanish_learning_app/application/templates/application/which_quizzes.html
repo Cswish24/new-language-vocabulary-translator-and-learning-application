@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css%}
+<link rel="stylesheet" href="{% static "application/quiz_databases.css" %}">
+<link rel="stylesheet" href="{% static "application/databases.css" %}">
+{% endblock %}
+
+<title>{% block title %}Databases{% endblock %}</title>
+
+{% block content %}
+<div class="background">
+    <div class="main">
+
+<div class="container">
+    <div class="container-flex">
+        <h2 class="heading">Which set of quizzes would you like to view</h2>
+
+       
+            <div class="cat-box">
+              <a class="nav-link" href="{% url "quiz-home" "true" %}">Personal Quizzes</a>
+              <a href="{% url "quiz-home" "false" %}" class="nav-link">Most Popular quizzes</a>
+              
+
+         </div>
+
+         <a href="{% url "quiz-stat-home" %}" class="link"><h2 class="heading stat-link">See Quiz Statistics</h2></a>
+    </div> 
+</div>
+</div>
+</div>
+{% endblock content %}

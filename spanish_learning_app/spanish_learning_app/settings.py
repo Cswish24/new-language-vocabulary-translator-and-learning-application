@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from os import getenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,18 +21,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-mr$so@w36usz6%vr1(@y6c8dd7x9=dfzf)u&+ptt25ti9prat4'
-
+# SECRET_KEY = getenv("SECRET_KEY")
+SECRET_KEY = getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+def debug():
+    if getenv("IS_DEVELOPMENT") == "False":
+        return False
+    else:
+        return True
+DEBUG = debug()
+# DEBUG = getenv("IS_DEVELOPMENT", True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "spanish-learning-env5.eba-n4qttcuq.us-west-2.elasticbeanstalk.com"
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'application',
+    'storages',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -84,11 +94,21 @@ WSGI_APPLICATION = 'spanish_learning_app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'worddb', 
-        'USER': 'postgres', 
-        'PASSWORD': 'localdb',
-        'HOST': '127.0.0.1', 
+        # local database
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'worddb', 
+        # 'USER': 'postgres', 
+        # 'PASSWORD': 'localdb',
+        # 'HOST': '127.0.0.1', 
+        # 'PORT': '5432',
+
+        #aws database
+
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': getenv("DBNAME"),
+        'USER': getenv("DBUSER"), 
+        'PASSWORD': getenv("DBPASSWORD"),
+        'HOST': getenv("DBHOST"), 
         'PORT': '5432',
     }
 }
@@ -127,11 +147,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS =[
     BASE_DIR / "static"
 ]
+
+AWS_STORAGE_BUCKET_NAME = getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = getenv('AWS_S3_REGION_NAME')
+AWS_ACCESS_KEY_ID = getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = getenv('AWS_SECRET_ACCESS_KEY')
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

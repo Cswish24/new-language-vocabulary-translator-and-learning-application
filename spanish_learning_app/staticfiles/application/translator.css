@@ -1,0 +1,13 @@
+.grid p {
+  font-size: 2.4rem;
+}
+
+.form-label {
+  font-size: 2.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.grid input {
+  font-size: 1.8rem;
+  font-weight: 400;
+}

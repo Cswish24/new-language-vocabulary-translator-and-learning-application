@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{%block css%}
+
+<link rel="stylesheet" href="{% static "application/card-flip.css" %}">
+<link rel="stylesheet" href="{% static "application/quiz-game.css" %}">
+
+  
+{%endblock%}
+
+<title>{% block title %}{{words.category| capfirst}} Quiz{% endblock %}</title>
+
+{% block content %}
+<div class="container-red">
+  <div class="container">
+    <div class="grid">
+      <h2 class="quiz-header">{{words.category| capfirst}} Quiz</h2>
+      <p class="quiz-subheading">Guess the translation for the word, then flip the card. If you guess right, click correct. If wrong, click incorrect. Be honest! An algortithm will determine which words you need to practice more. </p>
+<div class="flip-card">
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <p class="lang">Spanish Word</p>
+      <p class="word">{{words.spanish_word|capfirst}}</p>
+    </div>
+    <div class="flip-card-back">
+      <p class="lang">English Word</p>
+      <p class="word">{{words.english_word|capfirst}}</p>
+    </div>
+  </div>
+</div>
+{% if hard_quiz %}
+  <a class="btn " href="{% url "quiz" "None" iterations personal words.id 1 %}">Correct</a>
+  <a class="btn " href="{% url "quiz" "None" iterations personal words.id 0 %}">Incorrect</a>
+{% else %}
+<a class="btn " href="{% url "quiz" words.category iterations personal words.id 1 %}">Correct</a>
+<a class="btn " href="{% url "quiz" words.category iterations personal words.id 0 %}">Incorrect</a>
+
+{% endif %}
+
+<a class="btn cspan" href="{% url "which-quizzes" %}">Back to Quiz Home</a>
+</div>
+</div>
+</div>
+{% endblock content %}

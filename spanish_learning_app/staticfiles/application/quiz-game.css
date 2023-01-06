@@ -1,0 +1,64 @@
+.container-red {
+  background-color: #ff6b6b;
+  height: 85vh;
+}
+
+.container {
+  background-color: #ffec99;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 20rem 20rem;
+  row-gap: 1.2rem;
+  column-gap: 1.2rem;
+  margin-top: 3.6rem;
+}
+.quiz-header {
+  font-size: 3.2rem;
+  grid-column: 1/-1;
+}
+
+.quiz-subheading {
+  grid-column: -1/1;
+  font-size: 1.8rem;
+  color: #777;
+  margin-bottom: 1.6rem;
+}
+
+.flip-card {
+  grid-column: 1/-1;
+  width: 100%;
+}
+
+.lang {
+  font-size: 2rem;
+  margin-top: 2.4rem;
+  margin-bottom: 2.4rem;
+}
+
+.word {
+  font-size: 3.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.btn {
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  grid-column: auto;
+}
+
+.cspan {
+  grid-column: 1/-1;
+}
+
+.quiz-header {
+  text-align: center;
+}
+
+.quiz-subheading {
+  text-align: center;
+}

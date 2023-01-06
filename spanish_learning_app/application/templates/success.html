@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% load static %}
+{% block css%}
+<link rel="stylesheet" href="{% static "application/success.css" %}">
+{% endblock %}
+<title>{% block title %}Success{% endblock %}</title>
+
+{% block content %}
+<div class="background">
+  <div class="main">
+    <h2 class="success">Success!</h2>
+    <h2 class="success">Quiz Completed</h2>
+    <a href="{% url "which-quizzes" %}" class="link"><h2 class="heading stat-link">Back to Quizzes</h2></a>
+
+  </div>
+</div>
+
+{% endblock %}

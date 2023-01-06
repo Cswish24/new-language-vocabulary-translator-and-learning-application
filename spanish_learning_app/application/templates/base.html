@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static "application/general.css" %}">
+
+    {%block css%}
+    {%endblock%}
+    <title>{% block title%}{%endblock%}</title>
+    
+</head>
+<body>
+
+    <header class="header" id="main-navigation">
+        <nav class="navigation">
+            <h1  class="main-header">Spanish English Learning app</h1>
+            <div class="nav-right">
+                {% if user.is_authenticated %}
+                <div class="nav">
+                    <a class="nav-link" href="{% url "personal_or_total_database" %}">View Database</a>
+                </div>
+                <div class="nav">
+                    <a class="nav-link" href="{% url 'home-page' %}">Home</a>
+                </div>
+                <div class="nav">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </div>
+                {% else %}
+                <div class="nav">
+                    <a class="nav-link" href="/login">Login</a>
+                </div>
+                {% endif %}
+        </div>
+        </div>
+    </header>  
+
+    <main>
+    {% block content%}
+    
+    {%endblock%}
+    </main>
+</body>
+</html>

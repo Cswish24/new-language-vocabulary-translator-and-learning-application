@@ -1,0 +1,37 @@
+.heading {
+  text-align: center;
+}
+
+.subheading {
+  text-align: center;
+}
+
+.container-flex {
+  width: 120rem;
+}
+
+tr {
+  font-size: 1.8rem;
+  text-align: left;
+}
+
+table {
+  margin-bottom: 3.2rem;
+}
+
+.link {
+  text-decoration: none;
+  color: #333;
+  background-color: #ffec99;
+  border: none;
+  font-size: 2rem;
+}
+
+.link:hover,
+.link:active {
+  color: #ff6b6b;
+}
+
+.stat-link {
+  margin-bottom: 3.2rem;
+}

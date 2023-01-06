@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css%}
+<link rel="stylesheet" href="{% static "application/home.css" %}">
+{% endblock %}
+<title>{% block title %}Home{% endblock %}</title>
+
+{% block content %}
+<div class="home-body">
+    <div class="home-skills">
+      <div class="container">
+         <div class="home-header">
+             <h2>Refine your Spanish speaking skills!</h2>
+             <p>Expand your Spanish vocabulary according to your own needs. 
+                Add words from your day-to-day life to the database and the application will create flashcard quizzes from the words you selected.
+
+            </p>
+        </div>
+      </div>
+      <div class="card-box">
+
+        <div class="card-link">
+
+            <a href="{% url "en-translator" %}">
+            <div class="card-body">
+                <h3 class="card-title">English Translator</h3>
+                <p class="card-subtitle">Translate English to Spanish</p>
+                <p class="card-text">How do you describe a kangaroo in Spanish? Skip the scharades and get a translation here!</p>
+            </div>
+            </a>
+        </div>
+        <div class="card-link">
+            <a href="{% url "es-translator" %}">
+                <div class="card-body">
+                    <h3 class="card-title">Spanish Translator</h3>
+                    <p class="card-subtitle">Translate Spanish to English</p>
+                    <p class="card-text">"Si, Verdad, yo se'...." Find out the translation for all the words you pretended to understand in your last spanish conversation.  </p>
+                </div>
+            </a>
+
+        </div>
+        <div class="card-link">
+            <a href="{% url "manual-translator" %}">
+                <div class="card-body">
+                    <h3 class="card-title">Manual Translator</h3>
+                    <p class="card-subtitle">Manually translate words</p>
+                    <p class="card-text">The translator application sometimes fails. Enter the word and its translation from a different translator</p>
+                </div>
+            </a>
+
+        </div>
+        <div class="card-link">
+            <a href="{% url "which-quizzes" %}">
+                <div class="card-body">
+                    <h3 class="card-title">Quiz</h3>
+                    <p class="card-subtitle">See available quizzes</p>
+                    <p class="card-text">Quizzes are generated from the words you have added to the database. Master these words with flashcard quizzes.</p>
+                </div>
+            </a>
+        </div>
+      </div>
+    </div>
+    <div class="stats">
+
+    </div>
+</div>
+
+{% endblock content %}
+
+{% comment %} fd5d5d ff8080 fff7bc c0eda6 {% endcomment %}
