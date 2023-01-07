@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 # Create your models here.
 
 class Words(models.Model):
@@ -21,3 +23,16 @@ class UsersWords(models.Model):
     wrong_guesses = models.FloatField(default=0)
     correct_guesses = models.FloatField(default=0)
     percentage = models.FloatField(default=0)
+
+class UserExtended(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    word_count = models.SmallIntegerField(default=0)
+
+@receiver(post_save, sender=User)
+def create_user_extended(sender, instance, created, **kwargs):
+    if created:
+        UserExtended.objects.create(user=instance)
+
+# @receiver(post_save, sender=User)
+# def save_user_extended(sender, instance, **kwargs):
+#     instance.profile.save()

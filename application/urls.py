@@ -18,5 +18,6 @@ urlpatterns = [
     path("quiz-stat-home", views.QuizStatHomeView.as_view(), name=("quiz-stat-home")),
     path("quiz-game/<str:category>/<int:iterations>/<str:personal>/<int:id>/<int:correct>", views.QuizView.as_view(), name=("quiz")),
     path("quiz-stat-view/<str:category>", views.StatView.as_view(), name=("stat-view")),
-    path("success", views.SuccessView.as_view(), name=("success"))
+    path("success", views.SuccessView.as_view(), name=("success")),
+    path("exceeded", views.ExceededView.as_view(), name=("exceeded")),
 ]

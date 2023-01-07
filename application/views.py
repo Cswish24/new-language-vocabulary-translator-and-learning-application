@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic.base import TemplateView
-from .models import UsersWords, Words
+from .models import UsersWords, Words, UserExtended
 from .forms import EnWordForm,EsWordForm, ManualWordForm, RegisterForm
 from .translator_api import translate_en, translate_es
 from django.db.models import Avg, Max, Min, Count, Sum
@@ -29,6 +29,7 @@ def sign_up(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+
             return HttpResponseRedirect(reverse('home-page'))
     else: 
         form = RegisterForm()
@@ -44,6 +45,10 @@ class EnTranslateView(View):
         return render(request, "application/en-translator.html", context)
 
     def post(self, request):
+        id = request.user.id
+        user_ex = UserExtended.objects.get(user=id)
+        if user_ex.word_count > 3:
+            return HttpResponseRedirect(reverse("exceeded"))
         word_form = EnWordForm(request.POST)
         if word_form.is_valid():
             word = word_form.save(commit=False)
@@ -60,6 +65,8 @@ class EnTranslateView(View):
                             existing_word.user.add(request.user)
                             return HttpResponseRedirect(reverse("en-translator"))
             word.spanish_word = translate_en(word.english_word)
+            user_ex.word_count += 1
+            user_ex.save()
             word.save()
             word.user.add(request.user)
             return HttpResponseRedirect(reverse("en-translator"))
@@ -73,6 +80,10 @@ class EsTranslateView(View):
         return render(request, "application/es-translator.html", context)
 
     def post(self, request):
+        id = request.user.id
+        user_ex = UserExtended.objects.get(user=id)
+        if user_ex.word_count > 3:
+            return HttpResponseRedirect(reverse("exceeded"))
         word_form = EsWordForm(request.POST)
         if word_form.is_valid():
             word = word_form.save(commit=False)
@@ -90,6 +101,8 @@ class EsTranslateView(View):
                             return HttpResponseRedirect(reverse("es-translator"))
 
             word.english_word = translate_es(word.spanish_word)
+            user_ex.word_count += 1
+            user_ex.save()
             word.save()
             word.user.add(request.user)
             return HttpResponseRedirect(reverse("es-translator"))
@@ -376,3 +389,7 @@ class QuizView(View):
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
 class SuccessView(TemplateView):
     template_name = 'success.html'
+
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
+class ExceededView(TemplateView):
+    template_name = 'exceeded.html'

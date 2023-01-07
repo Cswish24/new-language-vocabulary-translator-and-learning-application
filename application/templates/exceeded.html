@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% load static %}
+{% block css%}
+<link rel="stylesheet" href="{% static "application/success.css" %}">
+{% endblock %}
+<title>{% block title %}Success{% endblock %}</title>
+
+{% block content %}
+<div class="background">
+  <div class="main">
+    <h2 class="success">Error!</h2>
+    <h2 class="success">You have exceeded the daily limit of words that can be translated. Please come back tomorrow!</h2>
+    <a href="{% url "home-page" %}" class="link"><h2 class="heading stat-link">Back to Home</h2></a>
+
+  </div>
+</div>
+
+{% endblock %}
